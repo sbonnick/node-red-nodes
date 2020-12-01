@@ -1,1 +1,1 @@
-# node-red-contrib-netsuite-query
+# node-red-nodes
