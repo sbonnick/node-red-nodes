@@ -1,0 +1,49 @@
+<script type="text/javascript">
+  RED.nodes.registerType('netsuite-connection',{
+      category: 'config',
+      defaults: {
+          name: {value:''},
+          consumerKey: {required: true},
+          consumerSecret: {required: true},
+          tokenKey: {required: true},
+          tokenSecret: {required: true},
+          realm: {required: true},
+          baseUrl: {required: true},
+      },
+      label: function() {
+          return this.name || this.consumerKey + ' connection';
+      }
+  });
+</script>
+
+<script type="text/html" data-template-name="netsuite-connection">
+  <div class="form-row">
+      <label for="node-config-input-name"><i class="icon-bookmark"></i> Name</label>
+      <input type="text" id="node-config-input-name">
+  </div>
+  <div class="form-row" style="white-space:nowrap">
+      <label for="node-config-input-consumerKey"><i class="fa fa-key"></i> Consumer Key</label>
+      <input type="text" id="node-config-input-consumerKey">
+  </div>
+  <div class="form-row" style="white-space:nowrap">
+      <label for="node-config-input-consumerSecret"><i class="fa fa-user-secret"></i> Consumer Secret</label>
+      <input type="password" id="node-config-input-consumerSecret">
+  </div>
+
+  <div class="form-row" style="white-space:nowrap">
+    <label for="node-config-input-tokenKey"><i class="fa fa-key"></i> Token Key</label>
+    <input type="text" id="node-config-input-tokenKey">
+  </div>
+  <div class="form-row" style="white-space:nowrap">
+    <label for="node-config-input-tokenSecret"><i class="fa fa-user-secret"></i> Token Secret</label>
+    <input type="password" id="node-config-input-tokenSecret">
+  </div>
+  <div class="form-row">
+      <label for="node-config-input-realm"><i class="fa fa-tasks"></i> Realm</label>
+      <input type="text" id="node-config-input-realm">
+  </div>
+  <div class="form-row" style="white-space:nowrap">
+    <label for="node-config-input-baseUrl"><i class="fa fa-history"></i> Base URL</label>
+    <input type="text" id="node-config-input-baseUrl" placeholder="https://realm.suitetalk.api.netsuite.com">
+  </div>
+</script>

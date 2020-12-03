@@ -1,0 +1,46 @@
+<script type="text/javascript">
+  RED.nodes.registerType('suiteql',{
+      category: 'NetSuite',
+      color: '#0082ca',
+      defaults: {
+        name: {value:""},
+        query: {value:""},
+        connection: {value:"", type:"netsuite-connection", required: true}
+      },
+      inputs:1,
+      outputs:1,
+      icon: "ns.png",
+      label: function() {
+          return this.name||"SuiteQL query";
+      }
+  });
+</script>
+
+<script type="text/html" data-template-name="suiteql">
+  <div class="form-row">
+      <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+      <input type="text" id="node-input-name" placeholder="Name">
+  </div>
+  <div class="form-row">
+      <label for="node-input-connection"><i class="fa fa-plug"></i> Connection</label>
+      <input type="text" id="node-input-connection">
+  </div>
+  <div class="form-row">
+      <label for="node-input-query"><i class="fa fa-database"></i> Query</label>
+      <textarea id="node-input-query" style="width:300px"></textarea>
+  </div>
+</script>
+
+<script type="text/html" data-help-name="suiteql">
+  <p>Executes a SOQL query.</p>
+<pre>
+SELECT id
+FROM issue
+ORDER BY id DESC
+</pre>
+  <p>The resulting message has the following properties:
+  <ul><li>msg.payload.size - the number of records returned from the query.</li>
+  <li>msg.payload.records - the array of records returned from the query.</li>
+  </ul></p>
+  <p>The query can be configured in the node, however if left blank, the query should be set in an incoming message on <code>msg.query</code>.</p>
+</script>
