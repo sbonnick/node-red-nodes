@@ -8,10 +8,8 @@ module.exports = function(RED) {
     var node = this;
     this.on('input', function(msg) {
 
-      // show initial status of progress
       node.status({fill:"green",shape:"ring",text:"connecting...."});
 
-      // use msg query if node's query is blank
       if (msg.hasOwnProperty("query") && config.query === '') {
         config.query = msg.query;
       }
@@ -31,10 +29,8 @@ module.exports = function(RED) {
         body: `{ "q": "${config.query}" }`.replace(/ +(?= )/g,'').replace(/\r?\n|\r/g, '')
       })
       .then(response => {
-        msg.payload = {
-          size: response.data.items.length || 0,
-          records: response.data.items
-        }
+        msg.count = response.data.items.length || 0
+        msg.payload = response.data.items
         node.send(msg);
         node.status({});
       })

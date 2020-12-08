@@ -1,17 +1,17 @@
 <script type="text/javascript">
-  RED.nodes.registerType('suiteql',{
-      category: 'NetSuite',
+  RED.nodes.registerType('jql',{
+      category: 'Jira',
       color: '#0082ca',
       defaults: {
         name: {value:""},
         query: {value:""},
-        connection: {value:"", type:"netsuite-connection", required: true}
+        connection: {value:"", type:"Jira-connection", required: true}
       },
       inputs:1,
       outputs:1,
-      icon: "ns.png",
+      icon: "jira.png",
       label: function() {
-          return this.name||"SuiteQL query";
+          return this.name||"JQL query";
       }
   });
 </script>
@@ -31,12 +31,10 @@
   </div>
 </script>
 
-<script type="text/html" data-help-name="suiteql">
-  <p>Executes a SuiteQL query.</p>
+<script type="text/html" data-help-name="jql">
+  <p>Executes a JQL query.</p>
 <pre>
-SELECT id
-FROM issue
-ORDER BY id DESC
+status = "In Progress"
 </pre>
   <p>The resulting message has the following properties:
   <ul><li>msg.count - the number of records returned from the query.</li>
