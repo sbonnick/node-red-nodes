@@ -10,4 +10,4 @@ FROM issue
 ORDER BY id DESC
 ```
 
-After execution, the msg.payload.size and msg.payload.records will be populated
+After execution, the msg.count and msg.payload will be populated

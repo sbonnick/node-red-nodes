@@ -1,13 +1,11 @@
-# Node-RED NetSuite
+# Node-RED Jira Streams
 
-## Using SuiteQL
+## Using JQL
 
 Either pass in msg.query or specify a query in the configuration of the node. Example:
 
 ```
-SELECT id
-FROM issue
-ORDER BY id DESC
+status = "In Progress"
 ```
 
-After execution, the msg.payload.size and msg.payload.records will be populated
+After execution, the msg.count and msg.payload will be populated
