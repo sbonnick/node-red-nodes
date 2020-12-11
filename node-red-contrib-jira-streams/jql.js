@@ -1,16 +1,16 @@
 module.exports = function(RED) {
 
-  const Jira = require('@atlassian/jira')
+  const ExternalJira = require('@atlassian/jira')
 
   async function _jql(jira, jql, batchSize = 50, pageIndex = 0, data) {
-    return this._jqlPage(jira, jql, batchSize, pageIndex)
+    return _jqlPage(jira, jql, batchSize, pageIndex)
       .then(response => {
         if (!data) data = []
 
         data = data.concat(response.data.issues)
         const next = response.data.startAt + response.data.maxResults
         if (next < response.data.total) {
-          return this._jql(jira, jql, batchSize, next, data)
+          return _jql(jira, jql, batchSize, next, data)
         }
         return data
       })
@@ -30,7 +30,7 @@ module.exports = function(RED) {
     this.connection = RED.nodes.getNode(config.connection);
     var node = this;
 
-    this.on('input', function(msg) {
+    this.on('input', async function(msg) {
       node.status({fill:"green",shape:"ring",text:"connecting...."});
 
       if (msg.hasOwnProperty("query") && config.query === '') {
@@ -38,7 +38,7 @@ module.exports = function(RED) {
       }
 
       const jira = new ExternalJira({
-        baseUrl: this.connection.baseurl,
+        baseUrl: this.connection.baseUrl,
         headers: {},
         options: {
           timeout: 36000
@@ -53,13 +53,13 @@ module.exports = function(RED) {
 
       let result
       try {
-        result = await this._jql(jira, config.query, config.batchSize)
+        result = await _jql(jira, config.query, config.batchSize)
         msg.count = result.length || 0
         msg.payload = result
         node.send(msg);
         node.status({});
       } catch(err) {
-        node.status({fill:"red",shape:"dot",text:"Error!"});
+        node.status({fill:"red",shape:"dot",text:"Error"});
         node.error(err);
       }
     });
