@@ -16,6 +16,29 @@ module.exports = function(RED) {
       })
   }
 
+  async function _jqlStream(node, jira, jql, batchSize = 50, pageIndex = 0) {
+    return _jqlPage(jira, jql, batchSize, pageIndex)
+      .then(response => {
+        const next = response.data.startAt + response.data.maxResults
+
+        const msg = {
+          query: jql,
+          startAt: response.data.startAt,
+          total: response.data.total,
+          maxResults: response.data.maxResults,
+          count: response.data.issues.length || 0,
+          payload: response.data.issues
+        }
+        node.status({fill:"green",shape:"dot",text:`connected: ${response.data.startAt} / ${msg.total}`});
+        node.send(msg);
+
+        if (next < response.data.total) {
+          return _jqlStream(node, jira, jql, response.data.maxResults, next)
+        }
+        return
+      })
+  }
+
   async function _jqlPage(jira, jql, batchSize, pageIndex) {
     return jira.search.searchForIssuesUsingJqlGet({
       jql: jql,
@@ -31,7 +54,7 @@ module.exports = function(RED) {
     var node = this;
 
     this.on('input', async function(msg) {
-      node.status({fill:"green",shape:"ring",text:"connecting...."});
+      node.status({fill:"green",shape:"ring",text:"initializing...."});
 
       if (msg.hasOwnProperty("query") && config.query === '') {
         config.query = msg.query;
@@ -41,7 +64,7 @@ module.exports = function(RED) {
         baseUrl: this.connection.baseUrl,
         headers: {},
         options: {
-          timeout: 36000
+          timeout: this.connection.timeout || 36000
         }
       })
 
@@ -51,12 +74,16 @@ module.exports = function(RED) {
         password: this.connection.password
       })
 
+      node.status({fill:"green",shape:"ring",text:"connecting...."});
+
       let result
       try {
-        result = await _jql(jira, config.query, config.batchSize)
-        msg.count = result.length || 0
-        msg.payload = result
-        node.send(msg);
+        result = await _jqlStream(node, jira, config.query, config.batchSize)
+
+        //msg.total = result
+        //msg.count = result.length || 0
+        //msg.payload = result
+        //node.send(msg);
         node.status({});
       } catch(err) {
         node.status({fill:"red",shape:"dot",text:"Error"});

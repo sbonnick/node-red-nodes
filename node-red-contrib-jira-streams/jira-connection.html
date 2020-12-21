@@ -6,11 +6,20 @@
           username: {required: true},
           password: {required: true},
           baseUrl: {required: true},
+          timeout: {value: 36000}
       },
       label: function() {
           return this.name || this.username + ' connection';
+      },
+      oneditprepare: function() {
+        $("node-config-input-timeout").typedInput({
+          type:"num",
+          typeField: "node-config-input-timeout-type"
+        })
       }
   });
+
+
 </script>
 
 <script type="text/html" data-template-name="jira-connection">
@@ -31,4 +40,10 @@
     <label for="node-config-input-baseUrl"><i class="fa fa-history"></i> Base URL</label>
     <input type="text" id="node-config-input-baseUrl" placeholder="https://api.atlassian.com/ex/jira/<cloudId>/rest">
   </div>
+  <div class="form-row" style="white-space:nowrap">
+    <label for="node-config-input-timeout"><i class="fa fa-clock"></i> Timeout</label>
+    <input type="text" id="node-config-input-timeout">
+    <input type="hidden" id="node-config-input-timeout-type">
+  </div>
+
 </script>
