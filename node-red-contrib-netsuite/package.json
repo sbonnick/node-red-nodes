@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-netsuite",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Node-RED nodes to interact with NetSuite",
   "scripts": {
     "test": "mocha \"test/**/*_spec.js\""

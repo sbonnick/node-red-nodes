@@ -10,7 +10,7 @@ module.exports = function(RED) {
 
       node.status({fill:"green",shape:"ring",text:"connecting...."});
 
-      if (msg.hasOwnProperty("query") && config.query === '') {
+      if (msg.hasOwnProperty("query")) {
         config.query = msg.query;
       }
 
