@@ -49,14 +49,14 @@ module.exports = function(RED) {
   }
 
   function Query(config) {
-    RED.nodes.createNode(this,config);
+    RED.nodes.createNode(this, config);
     this.connection = RED.nodes.getNode(config.connection);
     var node = this;
 
     this.on('input', async function(msg) {
       node.status({fill:"green",shape:"ring",text:"initializing...."});
 
-      if (msg.hasOwnProperty("query") && config.query === '') {
+      if (msg.hasOwnProperty("query")) {
         config.query = msg.query;
       }
 
